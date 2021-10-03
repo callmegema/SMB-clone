@@ -131,7 +131,7 @@ public class Mario : MonoBehaviour {
 				} else if (isDashing && currentSpeedX < maxRunSpeedX) {
 					currentSpeedX = IncreaseWithinBound (currentSpeedX, runAccelerationX, maxRunSpeedX);
 				}
-			} 
+			}
 
 			// Decelerate upon release of directional button
 			else if (currentSpeedX > 0) {
@@ -262,13 +262,14 @@ public class Mario : MonoBehaviour {
 		if (faceDirectionX != 0 && !isChangingDirection) {
 			moveDirectionX = faceDirectionX;
 		}
-			
+
 	}
 
 
 	/****************** Automatic movement sequences */
 	void Update() {
 		if (!inputFreezed) {
+			// for PC
 			faceDirectionX = Input.GetAxisRaw ("Horizontal"); // > 0 for right, < 0 for left
 			isDashing = Input.GetButton ("Dash");
 			isCrouching = Input.GetButton ("Crouch");
@@ -277,10 +278,22 @@ public class Mario : MonoBehaviour {
 			if (Input.GetButtonUp ("Jump")) {
 				jumpButtonReleased = true;
 			}
+
+			// for smart phone
+			if (Input.GetMouseButton(0)) {
+				faceDirectionX = Input.mousePosition.x / Screen.width * 2 - 1;
+				float faceDirectionY = Input.mousePosition.y / Screen.height * 2 - 1;
+				isDashing = (faceDirectionX > 0.7 || faceDirectionX < -0.7);
+				isCrouching = faceDirectionY < -0.8;
+				// isShooting = Input.GetButtonDown ("Dash");
+				jumpButtonHeld = faceDirectionY > 0;
+			} else if (Input.GetMouseButtonUp(0)) {
+				jumpButtonReleased = true;
+			}
 		}
 
 		isFalling = m_Rigidbody2D.velocity.y < 0 && !isGrounded;
-		isGrounded = Physics2D.OverlapPoint (m_GroundCheck1.position, GroundLayers) || Physics2D.OverlapPoint (m_GroundCheck2.position, GroundLayers); 
+		isGrounded = Physics2D.OverlapPoint (m_GroundCheck1.position, GroundLayers) || Physics2D.OverlapPoint (m_GroundCheck2.position, GroundLayers);
 		isChangingDirection = currentSpeedX > 0 && faceDirectionX * moveDirectionX < 0;
 
 
@@ -379,7 +392,7 @@ public class Mario : MonoBehaviour {
 		FreezeUserInput ();
 		isCrouching = true;
 	}
-		
+
 
 	/****************** Misc */
 	public void UpdateSize() {
@@ -411,9 +424,9 @@ public class Mario : MonoBehaviour {
 			Enemy enemy = other.gameObject.GetComponent<Enemy> ();
 
 			if (!t_LevelManager.isInvincible ()) {
-				if (!other.gameObject.GetComponent<KoopaShell> () || 
+				if (!other.gameObject.GetComponent<KoopaShell> () ||
 					other.gameObject.GetComponent<KoopaShell> ().isRolling ||  // non-rolling shell should do no damage
-					!bottomHit || (bottomHit && !enemy.isBeingStomped)) 
+					!bottomHit || (bottomHit && !enemy.isBeingStomped))
 				{
 					Debug.Log (this.name + " OnCollisionEnter2D: Damaged by " + other.gameObject.name
 						+ " from " + normal.ToString () + "; isFalling=" + isFalling); // TODO sometimes fire before stompbox reacts
@@ -423,7 +436,7 @@ public class Mario : MonoBehaviour {
 			} else if (t_LevelManager.isInvincibleStarman) {
 				t_LevelManager.MarioStarmanTouchEnemy (enemy);
 			}
-		
+
 		} else if (other.gameObject.tag == "Goal" && isClimbingFlagPole && bottomHit) {
 			Debug.Log (this.name + ": Mario hits bottom of flag pole");
 			isClimbingFlagPole = false;
