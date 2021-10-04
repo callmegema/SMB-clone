@@ -48,17 +48,19 @@ public class Mario : MonoBehaviour {
 	public float castleWalkSpeedX = 5.86f;
 	public float levelEntryWalkSpeedX = 3.05f;
 
-	private bool isGrounded;
-	private bool isDashing;
-	private bool isFalling;
-	private bool isJumping;
-	private bool isChangingDirection;
-	private bool wasDashingBeforeJump;
-	private bool isShooting;
+	public bool isGrounded;
+	public bool isDashing;
+	public bool isFalling;
+	public bool isJumping;
+	public bool isChangingDirection;
+	public bool wasDashingBeforeJump;
+	public bool isShooting;
 	public bool isCrouching;
 
-	private bool jumpButtonHeld;
-	private bool jumpButtonReleased;
+	public bool jumpButtonHeld;
+	public bool jumpButtonReleased;
+
+	private Vector3 initialMousePosition;
 
 	public bool inputFreezed;
 
@@ -280,13 +282,27 @@ public class Mario : MonoBehaviour {
 			}
 
 			// for smart phone
-			if (Input.GetMouseButton(0)) {
-				faceDirectionX = Input.mousePosition.x / Screen.width * 2 - 1;
-				float faceDirectionY = Input.mousePosition.y / Screen.height * 2 - 1;
-				isDashing = (faceDirectionX > 0.7 || faceDirectionX < -0.7);
-				isCrouching = faceDirectionY < -0.8;
+			if (Input.GetMouseButtonDown(0)) {
+				initialMousePosition = Input.mousePosition;
+			} else if (Input.GetMouseButton(0)) {
+				faceDirectionX = (Input.mousePosition.x / Screen.width - initialMousePosition.x / Screen.width) * 2 ;
+				float faceDirectionY = (Input.mousePosition.y / Screen.height - initialMousePosition.y / Screen.height) * 2;
+				isDashing = (faceDirectionX > 0.5 || faceDirectionX < -0.5);
+				isCrouching = faceDirectionY < -0.3;
 				// isShooting = Input.GetButtonDown ("Dash");
-				jumpButtonHeld = faceDirectionY > 0;
+				if (jumpButtonHeld) {
+					jumpButtonReleased = faceDirectionY <= 0.3;
+					Debug.Log("here");
+				}
+				jumpButtonHeld = faceDirectionY > 0.3;
+
+				// 指が触れる 0.0 false/(true)
+				// 指が上に動く 0.3 true/(true)でjumpしてtrue/falseになる
+				// 指をホールド 0.3 true/(false)
+				// 指を下げる 0.2 false/true
+				// jumpButtonReleasedの初期値がtrue
+				// isGround, jumpButtonHeldがtrueになってjumpする
+				Debug.Log("init:" + initialMousePosition.ToString() + "input:" + Input.mousePosition.ToString() + "X:" + faceDirectionX + " Y:" + faceDirectionY);
 			} else if (Input.GetMouseButtonUp(0)) {
 				jumpButtonReleased = true;
 			}
