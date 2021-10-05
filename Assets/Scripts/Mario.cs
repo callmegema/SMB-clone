@@ -272,14 +272,14 @@ public class Mario : MonoBehaviour {
 	void Update() {
 		if (!inputFreezed) {
 			// for PC
-			faceDirectionX = Input.GetAxisRaw ("Horizontal"); // > 0 for right, < 0 for left
-			isDashing = Input.GetButton ("Dash");
-			isCrouching = Input.GetButton ("Crouch");
-			isShooting = Input.GetButtonDown ("Dash");
-			jumpButtonHeld = Input.GetButton ("Jump");
-			if (Input.GetButtonUp ("Jump")) {
-				jumpButtonReleased = true;
-			}
+			// faceDirectionX = Input.GetAxisRaw ("Horizontal"); // > 0 for right, < 0 for left
+			// isDashing = Input.GetButton ("Dash");
+			// isCrouching = Input.GetButton ("Crouch");
+			// isShooting = Input.GetButtonDown ("Dash");
+			// jumpButtonHeld = Input.GetButton ("Jump");
+			// if (Input.GetButtonUp ("Jump")) {
+			// 	jumpButtonReleased = true;
+			// }
 
 			// for smart phone
 			if (Input.GetMouseButtonDown(0)) {
@@ -292,17 +292,8 @@ public class Mario : MonoBehaviour {
 				// isShooting = Input.GetButtonDown ("Dash");
 				if (jumpButtonHeld) {
 					jumpButtonReleased = faceDirectionY <= 0.3;
-					Debug.Log("here");
 				}
 				jumpButtonHeld = faceDirectionY > 0.3;
-
-				// 指が触れる 0.0 false/(true)
-				// 指が上に動く 0.3 true/(true)でjumpしてtrue/falseになる
-				// 指をホールド 0.3 true/(false)
-				// 指を下げる 0.2 false/true
-				// jumpButtonReleasedの初期値がtrue
-				// isGround, jumpButtonHeldがtrueになってjumpする
-				Debug.Log("init:" + initialMousePosition.ToString() + "input:" + Input.mousePosition.ToString() + "X:" + faceDirectionX + " Y:" + faceDirectionY);
 			} else if (Input.GetMouseButtonUp(0)) {
 				jumpButtonReleased = true;
 			}
