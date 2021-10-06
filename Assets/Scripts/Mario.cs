@@ -289,7 +289,7 @@ public class Mario : MonoBehaviour {
 				float faceDirectionY = (Input.mousePosition.y / Screen.height - initialMousePosition.y / Screen.height) * 2;
 				isDashing = (faceDirectionX > 0.5 || faceDirectionX < -0.5);
 				isCrouching = faceDirectionY < -0.3;
-				// isShooting = Input.GetButtonDown ("Dash");
+
 				if (jumpButtonHeld) {
 					jumpButtonReleased = faceDirectionY <= 0.3;
 				}
