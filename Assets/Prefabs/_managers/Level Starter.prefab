@@ -629,7 +629,16 @@ MonoBehaviour:
   FirePos: {fileID: 4650264610460380}
   castleWalkSpeedX: 5.86
   levelEntryWalkSpeedX: 3.05
+  isGrounded: 0
+  isDashing: 0
+  isFalling: 0
+  isJumping: 0
+  isChangingDirection: 0
+  wasDashingBeforeJump: 0
+  isShooting: 0
   isCrouching: 0
+  jumpButtonHeld: 0
+  jumpButtonReleased: 0
   inputFreezed: 0
   isDying: 0
 --- !u!50 &50873520463771854
@@ -792,7 +801,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -8, y: 3}
+  m_Offset: {x: -4, y: 3}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
